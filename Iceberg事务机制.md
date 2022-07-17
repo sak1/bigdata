@@ -9,17 +9,15 @@
 
 3. manifests（snapshot快照）文件生成之后，再紧接着生成一个表元数据版本文件（文件名为：xxxx-metadata.json，其中xxxx是当前snapshot的版本号）。表元数据版本文件记录这个snapshot对应的表schema信息、partition spec信息以及manifests文件的路径等。
 
+
 需要说明的是，整个commit过程是一个事务执行，即实现了ACID特性。
-
 **原子性**：整个提交要么成功，要么失败。不会存在中间过程。
-
 **一致性**：事务提交成功之后表的snapshot会从一个版本变更为另一个版本。
-
 **隔离性**：一旦提交成功之后其他查询服务才可以查询到数据，否则查询不到。
-
 **持久性**：事务提交之后，数据会被永久性地持久化到存储系统。
 
-至于如何实现多线程并发场景下的ACID，以应用Hadoop Catalog的iceberg表为例进行说明：
+
+如何实现多线程并发场景下的ACID，以应用Hadoop Catalog的iceberg表为例进行说明：
 
 每个iceberg表都有一个HDFS文件记录这个表的当前snapshot版本，文件称为version-hint.text。
 
@@ -34,11 +32,8 @@
 本节，主要说明与表（事务）操作相关的几个主要接口和类的UML图。
 
 针对iceberg表，可以分为表的单语句操作和表的多语句操作，其分别对应两种表的操作接口：
-
 1）表接口，interface Table，这是对表的单语句操作的接口。
-
 2）事务接口，interface Transaction，这是对表执行多语句操作时需要的接口。可以理解为“狭义的事务”。
-
 
 ## 表单语句操作接口
 针对表的单语句操作，应用接口interface Table。Table接口和实现类BaseTable的关系：<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/20360202/1624721199056-bd5fe5ae-40eb-45d6-9d3b-0287b568090c.png#clientId=uc988fdec-5084-4&from=paste&height=365&id=uefbf6057&margin=%5Bobject%20Object%5D&name=image.png&originHeight=729&originWidth=390&originalType=binary&ratio=2&size=31625&status=done&style=none&taskId=u7d1a93db-ba3a-4bf4-a261-41fa820e279&width=195)
@@ -93,11 +88,4 @@
 ## 基于乐观锁的事务commit过程
 iceberg中，基于乐观锁机制创建表操作（事务）过程中的snapshot文件，并进行commit操作。同时，会应用Hive Metastore或者Hadoop HDFS自身的原子性，保证元数据文件的原子操作。<br />下图，以HMS管理iceberg元数据入口为例，描述表操作（事务）的commit过程：<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/20360202/1625647743475-677a48bd-ba1b-497b-90d4-2557f27224e8.png#clientId=ufd28fa3b-634d-4&from=paste&height=361&id=u19d2e46d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=721&originWidth=847&originalType=binary&ratio=1&size=77288&status=done&style=none&taskId=u8e4f824f-8704-4a1b-91eb-0e1ec1480a0&width=423.5)
 
-
-<a name="zaJnZ"></a>
-# 应用iceberg-nessie模块的多表事务机制
-详细信息，参考 [https://deepexi.yuque.com/2048lab/pgnfqb/rn9fg5](https://deepexi.yuque.com/2048lab/pgnfqb/rn9fg5)
-
-
----<br />未完待续
 
