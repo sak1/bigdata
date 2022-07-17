@@ -1,6 +1,3 @@
-
-
-<a name="nnYjf"></a>
 # 1 Schema演化
 Iceberg schema演化支持添加，删除，更新或重命名，并且没有副作用。
 <a name="gSg9O"></a>
@@ -248,10 +245,4 @@ spark-sql> merge into tab1_1 t using (select 5 as id,'hameimei' as name,13 as ag
 ```
 ![](https://cdn.nlark.com/yuque/0/2021/png/20359301/1623051285781-b8635ce3-b4ee-4083-b2a7-7164379e8f6d.png#height=286&id=Uula9&originHeight=664&originWidth=684&originalType=binary&ratio=1&status=done&style=none&width=295)<br />
 
-<a name="gq4sX"></a>
-# 8 快照管理
-待补充
-<a name="fMg1F"></a>
-# 9 小文件合并
-待补充<br />
 
