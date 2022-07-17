@@ -1,5 +1,3 @@
-<a name="gixQX"></a>
-# 概述
 在应用iceberg表格式进行数据存储时，上层业务写好一批文件，调用iceberg的commit接口提交本次写入形成一个新的snapshot快照。
 
 写引擎调用iceberg的commit接口，iceberg主要会做如下几个事情：
