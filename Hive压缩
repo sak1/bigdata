@@ -1,0 +1,51 @@
+HIVE启用压缩
+启用压缩可以使得磁盘上存储的数据所占用空间变小，这样可以使得I/O负载率降低进而提高查询速度。压缩和解压会消耗CPU资源，但Hive产生的MapReduce作业往往是I/O密集型的，通常CPU开销不是问题，而内存空间才是问题的关键。一个复杂的Hive查询在提交后，通常被转换为一系列中间阶段的MapReduce作业，Hive引擎将这些作业串联起来完成整个查询。因此可以将这些中间数据进行压缩。这些中间数据是指上一个MapReduce作业的输出，这些输出将被下一个MapReduce作业作为输入数据使用。
+
+（1）查看Hive支持的压缩编码方式：set  io.compress.codes,示例如下：
+（2）参数优化说明：
+表2.1.2-1 Hive启用压缩优化参数列表
+参数	默认值	优化值	参数说明
+hive.exec.compress.intermediate	false	true	该参数用于启动MapReduce中间数据压缩。
+该参数值设置为“true”，即表示启用中间结果压缩。
+hive.intermediate.compression.codec	空值	
+org.apache.hadoop.io.compress.SnappyCodec	
+该参数设置压缩格式。可支持参数值如下：
+org.apache.hadoop.io.compress.SnappyCodec
+org.apache.hadoop.io.compress.GzipCodec
+org.apache.hadoop.io.compress.BZip2Codec
+org.apache.hadoop.io.compress.DeflateCodec
+org.apache.hadoop.io.compress.Lz4Codec
+org.apache.hadoop.io.compress.DefaultCodec
+hive.intermediate.compression.type	空值	BLOCK	该参数设置为“BLOCK”，即数据以区块进行压缩。
+hive.exec.compress.output	false	true	 该参数设置Hive输出写入到表中是，对输出内容进行压缩。
+参数值设置为“true”，即表示启用最终输出压缩。
+（3）参数文件配置：
+1）启用中间结果压缩参数配置示例（推荐该种方式必须设置）：
+<property>  
+  <name>hive.exec.compress.intermediate</name>  
+  <value>true</value>  
+  <description>  
+  This controls whether intermediate files produced by Hive between multiple map-reduce jobs are compressed.  
+  The compression codec and other options are determined from Hadoop config variables mapred.output.compress*  
+  </description>  
+  </property>  
+  <property>  
+  <name>hive.intermediate.compression.codec</name>  
+  <value>org.apache.hadoop.io.compress.SnappyCodec</value>  
+  <description/>  
+  </property>  
+  <property>  
+  <name>hive.intermediate.compression.type</name>  
+  <value>BLOCK</value>  
+  <description/>  
+  </property>  
+2）启用最终结果压缩示例（须同时设置压缩格式和数据块压缩）
+  <property>  
+  <name>hive.exec.compress.output</name>  
+  <value>true</value>  
+  <description>  
+  This controls whether the final outputs of a query (to a local/HDFS file or a Hive table) is compressed.  
+  The compression codec and other options are determined from Hadoop config variables mapred.output.compress*  
+  </description>  
+  </property>  
+注：参数文件中，压缩格式设置和数据块压缩，只需要设置一次即可。
