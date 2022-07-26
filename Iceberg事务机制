@@ -1,6 +1,6 @@
-在应用iceberg表格式进行数据存储时，上层业务写好一批文件，调用iceberg的commit接口提交本次写入形成一个新的snapshot快照。
+Iceberg表格式进行数据存储时，上层业务写好一批文件，调用iceberg的commit接口提交本次写入形成一个新的snapshot快照。
 
-写引擎调用iceberg的commit接口，iceberg主要会做如下几个事情：
+写引擎调用iceberg的commit接口，Iceberg主要会做如下几个事情：
 
 1. 根据提交的文件解析出对应的文件元数据生成一个manifest文件，manifest文件中包含所有提交的数据文件的统计信息，每个数据文件在manifest文件中就是一条记录。
 2.  manifest文件生成之后，会紧接着生成一个manifests（snapshot快照）文件。manifests文件中每条记录是这个表当前所有manifest文件统计信息集合。每个manifest文件在manifests文件中就是一条记录。
