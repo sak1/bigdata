@@ -1,0 +1,195 @@
+1　在 CentOS 环境中执行下载
+
+docker pull trinodb/trino
+2　运行trino server
+
+您可以启动单节点特里诺集群进行测试。 特里诺节点将同时充当协调器和工作者。 启动它，请执行以下操作：
+docker run -p 8080:8080 --name trinoserver trinodb/trino
+其中　—name trinoserver是 Trino 镜像的名称，可变更，或都不用。
+出现======== SERVER STARTED ========即为成功
+
+3　执行 Trino，另开一个窗口
+docker exec -it trinoserver trino
+ trinoserver为镜像的名称， trino 为进入容器后执行的命令
+docker exec -it 078b40980084 trino
+
+出现 Trino>，即为成功；
+4　执行 SQL
+trino> show catalogs;
+ Catalog 
+---------
+ jmx     
+ memory  
+ system  
+ tpcds   
+ tpch    
+(5 rows)
+
+Query 20230601_144426_00000_m2vuf, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+1.94 [0 rows, 0B] [0 rows/s, 0B/s]
+
+
+trino> show schemas in tpch;
+       Schema       
+--------------------
+ information_schema 
+ sf1                
+ sf100              
+ sf1000             
+ sf10000            
+ sf100000           
+ sf300              
+ sf3000             
+ sf30000            
+ tiny               
+(10 rows)
+
+Query 20230601_144443_00001_m2vuf, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+0.70 [10 rows, 119B] [14 rows/s, 170B/s]
+
+trino> show tables in tpch.sf1;
+  Table   
+----------
+ customer 
+ lineitem 
+ nation   
+ orders   
+ part     
+ partsupp 
+ region   
+ supplier 
+(8 rows)
+
+Query 20230601_144518_00002_m2vuf, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+0.63 [8 rows, 158B] [12 rows/s, 250B/s]
+
+trino> use tpch.sf1;
+USE
+
+
+trino:sf1> show tables;
+  Table   
+----------
+ customer 
+ lineitem 
+ nation   
+ orders   
+ part     
+ partsupp 
+ region   
+ supplier 
+(8 rows)
+
+Query 20230601_144637_00007_m2vuf, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+0.25 [8 rows, 158B] [31 rows/s, 627B/s]
+
+trino:sf1> select * from nation;
+ nationkey |      name      | regionkey |                                                      comment       >
+-----------+----------------+-----------+-------------------------------------------------------------------->
+         0 | ALGERIA        |         0 |  haggle. carefully final deposits detect slyly agai                >
+         1 | ARGENTINA      |         1 | al foxes promise slyly according to the regular accounts. bold requ>
+         2 | BRAZIL         |         1 | y alongside of the pending deposits. carefully special packages are>
+         3 | CANADA         |         1 | eas hang ironic, silent packages. slyly regular packages are furiou>
+         4 | EGYPT          |         4 | y above the carefully unusual theodolites. final dugouts are quickl>
+         5 | ETHIOPIA       |         0 | ven packages wake quickly. regu                                    >
+         6 | FRANCE         |         3 | refully final requests. regular, ironi                             >
+         7 | GERMANY        |         3 | l platelets. regular accounts x-ray: unusual, regular acco         >
+         8 | INDIA          |         2 | ss excuses cajole slyly across the packages. deposits print aroun  >
+         9 | INDONESIA      |         2 |  slyly express asymptotes. regular deposits haggle slyly. carefully>
+        10 | IRAN           |         4 | efully alongside of the slyly final dependencies.                  >
+        11 | IRAQ           |         4 | nic deposits boost atop the quickly final requests? quickly regula >
+        12 | JAPAN          |         2 | ously. final, express gifts cajole a                               >
+        13 | JORDAN         |         4 | ic deposits are blithely about the carefully regular pa            >
+        14 | KENYA          |         0 |  pending excuses haggle furiously deposits. pending, express pinto >
+        15 | MOROCCO        |         0 | rns. blithely bold courts among the closely regular packages use fu>
+        16 | MOZAMBIQUE     |         0 | s. ironic, unusual asymptotes wake blithely r                      >
+        17 | PERU           |         1 | platelets. blithely pending dependencies use fluffily across the ev>
+        18 | CHINA          |         2 | c dependencies. furiously express notornis sleep slyly regular acco>
+        19 | ROMANIA        |         3 | ular asymptotes are about the furious multipliers. express dependen>
+        20 | SAUDI ARABIA   |         4 | ts. silent requests haggle. closely express packages sleep across t>
+        21 | VIETNAM        |         2 | hely enticingly express accounts. even, final                      >
+        22 | RUSSIA         |         3 |  requests against the platelets use never according to the quickly >
+        23 | UNITED KINGDOM |         3 | eans boost carefully special requests. accounts are. carefull      >
+        24 | UNITED STATES  |         1 | y final packages. slow foxes cajole quickly. quickly silent platele>
+(25 rows)
+...skipping...
+
+Query 20230601_144650_00008_m2vuf, FINISHED, 1 node
+Splits: 4 total, 4 done (100.00%)
+3.34 [25 rows, 0B] [7 rows/s, 0B/s]
+
+
+trino:sf1> select * from region;
+ regionkey |    name     |                                                       comment                     >
+-----------+-------------+----------------------------------------------------------------------------------->
+         0 | AFRICA      | lar deposits. blithely final packages cajole. regular waters are final requests. r>
+         1 | AMERICA     | hs use ironic, even requests. s                                                   >
+         2 | ASIA        | ges. thinly even pinto beans ca                                                   >
+         3 | EUROPE      | ly final courts cajole furiously final excuse                                     >
+         4 | MIDDLE EAST | uickly special accounts cajole carefully blithely close requests. carefully final >
+(5 rows)
+
+Query 20230601_144857_00011_m2vuf, FINISHED, 1 node
+Splits: 4 total, 4 done (100.00%)
+0.25 [5 rows, 0B] [20 rows/s, 0B/s]
+
+trino:sf1> select * from orders limit 10;
+ orderkey | custkey | orderstatus | totalprice | orderdate  |  orderpriority  |      clerk      | shippriorit>
+----------+---------+-------------+------------+------------+-----------------+-----------------+------------>
+  3000001 |  145618 | F           |   30175.88 | 1992-12-17 | 4-NOT SPECIFIED | Clerk#000000141 |            >
+  3000002 |    1481 | O           |  297999.63 | 1995-07-28 | 1-URGENT        | Clerk#000000547 |            >
+  3000003 |  127432 | O           |  345438.38 | 1997-11-04 | 5-LOW           | Clerk#000000488 |            >
+  3000004 |   47423 | O           |  135965.53 | 1996-06-13 | 4-NOT SPECIFIED | Clerk#000000004 |            >
+  3000005 |   84973 | F           |  209937.09 | 1992-09-12 | 5-LOW           | Clerk#000000030 |            >
+  3000006 |  135136 | O           |  140186.32 | 1996-09-26 | 1-URGENT        | Clerk#000000726 |            >
+  3000007 |   78841 | F           |  298655.07 | 1992-04-13 | 5-LOW           | Clerk#000000871 |            >
+  3000032 |  124576 | F           |   175973.9 | 1992-03-02 | 1-URGENT        | Clerk#000000460 |            >
+  3000033 |   30247 | F           |    4635.38 | 1993-11-10 | 1-URGENT        | Clerk#000000923 |            >
+  3000034 |    5498 | F           |  348308.79 | 1992-04-21 | 1-URGENT        | Clerk#000000418 |            >
+(10 rows)
+
+Query 20230601_144957_00012_m2vuf, FINISHED, 1 node
+Splits: 9 total, 9 done (100.00%)
+0.62 [32.3K rows, 0B] [52.4K rows/s, 0B/s]
+
+trino:sf1> describe nation;
+  Column   |     Type     | Extra | Comment 
+-----------+--------------+-------+---------
+ nationkey | bigint       |       |         
+ name      | varchar(25)  |       |         
+ regionkey | bigint       |       |         
+ comment   | varchar(152) |       |         
+(4 rows)
+
+Query 20230601_145037_00013_m2vuf, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+0.81 [4 rows, 226B] [4 rows/s, 281B/s]
+
+建表
+trino> use memory.default;
+Use
+trino:default> CREATE TABLE orders (
+            ->   orderkey bigint,
+            ->   orderstatus varchar,
+            ->   totalprice double,
+            ->   orderdate date
+            -> );
+
+CREATE TABLE
+
+trino:default> show tables;
+ Table  
+--------
+ orders 
+(1 row)
+
+Query 20230602_145414_00039_3c7d7, FINISHED, 1 node
+Splits: 7 total, 7 done (100.00%)
+0.37 [1 rows, 23B] [2 rows/s, 62B/s]
+
+
+
