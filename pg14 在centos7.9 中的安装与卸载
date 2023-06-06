@@ -1,0 +1,53 @@
+
+一、Install Standalone
+在centos 中执行
+cat /etc/centos-release
+
+1 install
+
+sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+sudo yum install -y postgresql14-server
+sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
+sudo systemctl enable postgresql-14
+sudo systemctl start postgresql-14
+
+2 run
+cd usr/pgsql-14/bin
+su postgres
+./psql
+postgres#
+
+3 OK
+
+二、unstall　
+
+三、install in docker
+如何在Docker中安装PostgreSQL的分步指南：
+
+安装Docker：确保你的系统上安装了Docker。您可以从Docker官方网站（https：//www.docker.com/get-started）下载并安装Docker。
+
+拉取PostgreSQL镜像：打开终端或命令提示符，执行以下命令，拉取官方PostgreSQL Docker镜像：
+
+docker pull postgres
+此命令将从Docker Hub下载最新的PostgreSQL镜像。
+
+创建PostgreSQL容器：下载镜像后，您可以创建Docker容器来运行PostgreSQL。使用以下命令：
+
+docker run --name my-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+让我们分解命令：
+
+--name my-postgres为容器分配一个名称。您可以用自己选择的名称替换“my-postgres”。
+-e POSTGRES_PASSWORD=mysecretpassword设置PostgreSQL用户“postgres”的密码。将“mysecretpassword”替换为您想要的密码。
+-p 5432:5432将容器的PostgreSQL端口映射到主机的端口。格式为host_port:container_port。如果需要，可以更改主机端口。
+-d在分离模式下运行容器。
+运行此命令后，Docker将基于PostgreSQL镜像创建一个容器并启动它。
+
+验证容器是否正在运行：您可以使用以下命令检查容器是否正在运行：
+docker ps
+此命令将显示正在运行的容器的列表。您应该会看到列出了PostgreSQL容器（本例中为“my-postgres”）。
+
+连接到PostgreSQL容器：要连接到在容器内运行的PostgreSQL服务器，可以使用PostgreSQL客户端应用程序，如psql。在您的主机上安装psql，然后使用以下命令连接到PostgreSQL容器：
+psql -h localhost -p 5432 -U postgres
+出现提示时，输入您在步骤3中指定的密码。现在，您应该连接到在Docker容器中运行的PostgreSQL服务器。
+
+就是这样！您已经成功地在Docker中安装了PostgreSQL并连接到正在运行的容器。您现在可以像往常一样使用PostgreSQL，创建数据库、表，并从客户端应用程序执行查询。
